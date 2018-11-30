@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha"
+    "test": "mocha --timeout 3000"
   },
   "author": "Douglas Morais",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "eslint": "^5.9.0",

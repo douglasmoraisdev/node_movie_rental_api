@@ -8,7 +8,7 @@ const models = require('../db/models');
 /** movie_list controller */
 exports.movie_list = (req, res) => {
 
-    models.MovieTitle.findAll().then(movies => {
+    return models.MovieTitle.findAll().then(movies => {
         res.json(movies);
     });
    
@@ -17,9 +17,13 @@ exports.movie_list = (req, res) => {
 /** movie_create controller */
 exports.movie_create = (req, res) => {
 
-    models.MovieTitle.findAll().then(movies => {
-        res.json(movies);
-    });
+    
+    return models.MovieTitle.create(
+        {title: req.body.title, directorName: req.body.directorName}
+    ).then(movieTitle => {
+        res.json({ message: "Movie successfully added!", movieTitle });
+    })
+
 
 }
 

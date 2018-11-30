@@ -45,6 +45,29 @@ describe('Movies tests', () => {
         });
     });
 
+    /*
+      * Test the POST / route
+      */
+    describe('POST / movie', () => {
+        it('it should POST a new Movie Title', (done) => {
+            let movieTitle = {
+                title: "The Lord of the Rings",
+                directorName: "J.R.R. Tolkien",
+            }
+            chai.request(server)
+                .post('/movies')
+                .send(movieTitle)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message').eql('Movie successfully added!');
+                    res.body.movieTitle.should.have.property('title');
+                    res.body.movieTitle.should.have.property('directorName');
+                    done();
+                });
+        });
+    });
+
      
     afterEach((done) => { //Before each test we empty the database
        

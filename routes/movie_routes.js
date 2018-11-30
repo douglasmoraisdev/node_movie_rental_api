@@ -11,7 +11,7 @@ let router = express.Router();
 router.get('/', movie_controller.movie_list);
 
 /** Root / POST Movie Route */
-router.post('/', movie_controller.movie_list);
+router.post('/', movie_controller.movie_create);
 
 
 /** /about Movie Route */
