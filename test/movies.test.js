@@ -25,9 +25,9 @@ describe('Movies tests', () => {
     });
     
     /*
-      * Test the /GET route
+      * Test the GET / route
       */
-    describe('/GET movies list', () => {
+    describe('GET / movies', () => {
         it('it should GET all the movies', (done) => {
             chai.request(server)
                 .get('/movies')
@@ -42,13 +42,11 @@ describe('Movies tests', () => {
 
 
     afterEach((done) => { //Before each test we empty the database
-
        
         models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
         .then(() => done())
         .catch((err) => done(err))
 
-     //done()
     });
 
 });
