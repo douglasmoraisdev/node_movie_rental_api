@@ -8,7 +8,7 @@ class Movie{
 
     get_list(){
 
-        return models.Movie.findAll().then(movies => {
+        return models.MovieTitle.findAll().then(movies => {
             
             return movies;
             /**

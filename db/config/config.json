@@ -10,7 +10,7 @@
   "test": {
     "username": "movie_rental",
     "password": "abacate",
-    "database": "movie_rental",
+    "database": "movie_rental_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "migrationStorage": "json"

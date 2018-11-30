@@ -19,6 +19,8 @@ module.exports = {
           model: 'MovieTitles',
           key: 'id'
         },
+        onDelete: 'SET NULL',
+        onUpdate: 'NO ACTION'
       },      
       createdAt: {
         allowNull: false,

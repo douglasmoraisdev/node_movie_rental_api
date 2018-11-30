@@ -1,14 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const MovieCopy = sequelize.define('MovieCopy', {
-    barcode: Sequelize.STRING,
     movieTitle_ID: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'MovieTitles',
         key: 'id'
       },
+      onDelete: 'SET NULL',
+      onUpdate: 'NO ACTION'      
     },    
+    barcode: DataTypes.STRING,
   }, {});
   MovieCopy.associate = function(models) {
     // associations can be defined here

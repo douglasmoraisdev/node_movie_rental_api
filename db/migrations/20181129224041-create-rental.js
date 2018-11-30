@@ -14,6 +14,8 @@ module.exports = {
           model: 'MovieCopies',
           key: 'id'
         },
+        onDelete: 'SET NULL',
+        onUpdate: 'NO ACTION'        
       },
       User_ID: {
         type: Sequelize.INTEGER,
@@ -21,6 +23,8 @@ module.exports = {
           model: 'Users',
           key: 'id'
         },
+        onDelete: 'SET NULL',
+        onUpdate: 'NO ACTION'        
       },
       rentalDate: {
         type: Sequelize.DATE

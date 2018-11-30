@@ -5,8 +5,11 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../index.js');
 let models = require('../db/models')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 let should = chai.should();
+
 
 
 chai.use(chaiHttp);
@@ -15,9 +18,9 @@ describe('Movies tests', () => {
     
     beforeEach((done) => { //Before each test we empty the database
 
-        models.Movie.destroy({truncate: true}).then(() => 
-            done()
-        );
+        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
+        .then(() => done())
+        .catch((err) => done(err))
 
     });
     
@@ -40,10 +43,12 @@ describe('Movies tests', () => {
 
     afterEach((done) => { //Before each test we empty the database
 
-        models.Movie.destroy({ truncate: true }).then(() =>
-            done()
-        );
+       
+        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
+        .then(() => done())
+        .catch((err) => done(err))
 
+     //done()
     });
 
 });
