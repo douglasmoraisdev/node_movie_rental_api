@@ -1,17 +1,26 @@
 /**
  * Movie Controllers
  */
-const Movies = require('../../core/movies')
+const models = require('../db/models');
+
 
 
 /** movie_list controller */
-exports.movie_list = async (req, res) => {
+exports.movie_list = (req, res) => {
 
-    let movies = new Movies()
-    
-    let movies_list = await movies.get_list();
+    models.MovieTitle.findAll().then(movies => {
+        res.json(movies);
+    });
    
-    res.json(movies_list);
+}
+
+/** movie_create controller */
+exports.movie_create = (req, res) => {
+
+    models.MovieTitle.findAll().then(movies => {
+        res.json(movies);
+    });
+
 }
 
 

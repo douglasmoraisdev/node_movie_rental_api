@@ -1,14 +1,19 @@
+/**
+ * Tests Movies behavior
+ * 
+ */
+
 process.env.NODE_ENV = 'test';
 
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../index.js');
-let models = require('../db/models')
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../index.js');
+const models = require('../db/models')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-let should = chai.should();
+const should = chai.should();
 
 
 
@@ -40,7 +45,7 @@ describe('Movies tests', () => {
         });
     });
 
-
+     
     afterEach((done) => { //Before each test we empty the database
        
         models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })

@@ -2,13 +2,17 @@
  * Movie Routes
  */
 let express = require('express');
-let movie_controller = require('./controllers/movie_controller');
+let movie_controller = require('../controllers/movie_controller');
 
 /** Instance Express Router */
 let router = express.Router();
 
-/** Root Movie Route */
+/** Root / GET Movie Route */
 router.get('/', movie_controller.movie_list);
+
+/** Root / POST Movie Route */
+router.post('/', movie_controller.movie_list);
+
 
 /** /about Movie Route */
 router.get('/about', (req, res) => {
