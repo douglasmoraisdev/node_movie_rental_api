@@ -1,9 +1,9 @@
-let express = require('express')
-let movie_router = require('./routes/movie_routes')
-let bodyParser = require('body-parser')
+const express = require('express')
+const movie_router = require('./routes/movie_routes')
+const bodyParser = require('body-parser')
 
 /** Instance Express App */
-let app = express()
+const app = express()
 
 app.use(bodyParser.json())
 //app.use(bodyParser.urlencoded({ extended: false }))
@@ -12,9 +12,8 @@ app.use(bodyParser.json())
 /** Add Movies Route to app */
 app.use('/movies', movie_router);
 
-
 /** Make server up */
-let server = app.listen(3000, () => {
+const server = app.listen(3000, () => {
     //let host = server.address().address
     let port = server.address().port
     

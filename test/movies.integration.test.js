@@ -15,8 +15,6 @@ const Op = Sequelize.Op;
 
 const should = chai.should();
 
-
-
 chai.use(chaiHttp);
 //Our parent block
 describe('Movies tests', () => {
@@ -49,7 +47,8 @@ describe('Movies tests', () => {
       * Test the POST / route
       */
     describe('POST / movie', () => {
-        it('it should POST a new Movie Title', (done) => {
+        
+        it('POST a new Movie Title', (done) => {
             let movieTitle = {
                 title: "The Lord of the Rings",
                 directorName: "J.R.R. Tolkien",
@@ -60,12 +59,54 @@ describe('Movies tests', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('Movie successfully added!');
-                    res.body.movieTitle.should.have.property('title');
-                    res.body.movieTitle.should.have.property('directorName');
+                    res.body.should.have.property('msg').eql('Movie successfully added!');
+                    res.body.movie.should.have.property('title');
+                    res.body.movie.should.have.property('directorName');
                     done();
                 });
         });
+
+        it('NOT POST a new Movie Title without title', (done) => {
+            let movieTitle = {
+                title: "",
+                directorName: "J.R.R. Tolkien",
+            }
+            chai.request(server)
+                .post('/movies')
+                .send(movieTitle)
+                .end((err, res) => {
+                    res.should.have.status(422);
+                    res.body.should.have.property('errors')
+                    res.body.errors.forEach(error => {
+                        error.should.to.have.property('msg').eql('Invalid value');
+                    })
+                    res.body.should.be.a('object');
+                    should.not.exist(res.body.movie);
+                    done();
+                });
+        });        
+
+        it('NOT POST a new Movie Title without a valid directorName', (done) => {
+            let movieTitle = {
+                title: "Star Wars 3",
+                directorName: "",
+            }
+            chai.request(server)
+                .post('/movies')
+                .send(movieTitle)
+                .end((err, res) => {
+                    res.should.have.status(422);
+                    res.body.should.have.property('errors')
+                    res.body.errors.forEach(error => {
+                        error.should.to.have.property('msg').eql('Invalid value');
+                    })
+                    res.body.should.be.a('object');
+                    should.not.exist(res.body.movie);
+                    done();
+                });
+        });        
+
+
     });
 
      
