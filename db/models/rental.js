@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Rental.associate = function(models) {
     // associations can be defined here
-    Rental.belongsTo(models.User);
-    Rental.belongsTo(models.MovieCopy);
+    Rental.belongsTo(models.User, { foreignKey: 'User_ID'});
+    Rental.belongsTo(models.MovieCopy, { foreignKey: 'movieCopy_ID'});
 
   };
   return Rental;

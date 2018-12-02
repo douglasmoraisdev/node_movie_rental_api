@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   MovieCopy.associate = function(models) {
     // associations can be defined here
-    MovieCopy.belongsTo(models.MovieTitle)
+    MovieCopy.belongsTo(models.MovieTitle, { foreignKey: 'movieTitle_ID'})
+
   };
   return MovieCopy;
 };

@@ -2,8 +2,8 @@
  * Movie Controllers
  */
 const models = require('../db/models');
-const { check, checkSchema, validationResult } = require('express-validator/check');
-
+const { checkSchema, validationResult } = require('express-validator/check');
+const Sequelize = require('sequelize');
 
 
 /** movie_list controller */
@@ -15,11 +15,22 @@ exports.movie_list = (req, res) => {
    
 }
 
+exports.movies_avaliable = (req, res) => {
+
+    return models.MovieTitle.AvaliableCopies()
+    .then(movies => {  
+
+        res.json(movies)
+    })
+    //.catch (err => res.json(err));    
+
+}
+
 /** movie_create controller */
 exports.movie_create = [
     checkSchema({
         title:{
-            //itle Validations            
+            //title Validations            
             in: ['body'],
             isLength: {
                 errorMessage: 'Title should be between 3 to 50 chars long',
