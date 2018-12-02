@@ -5,7 +5,8 @@
     "database": "movie_rental",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "migrationStorage": "json" 
+    "migrationStorage": "json",
+    "logging": false
   },
   "test": {
     "username": "movie_rental",
@@ -13,7 +14,8 @@
     "database": "movie_rental_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "migrationStorage": "json"
+    "migrationStorage": "json",
+    "logging": false
   },
   "production": {
     "username": "root",

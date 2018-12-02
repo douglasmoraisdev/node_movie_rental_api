@@ -2,7 +2,8 @@
  * Movie Controllers
  */
 const models = require('../db/models');
-const { check, validationResult } = require('express-validator/check');
+const { check, checkSchema, validationResult } = require('express-validator/check');
+
 
 
 /** movie_list controller */
@@ -16,13 +17,32 @@ exports.movie_list = (req, res) => {
 
 /** movie_create controller */
 exports.movie_create = [
-    /** Validations */
-    check('title').not().isEmpty(),
-    check('title').isLength({min: 3}),
+    checkSchema({
+        title:{
+            //itle Validations            
+            in: ['body'],
+            isLength: {
+                errorMessage: 'Title should be between 3 to 50 chars long',
+                options: { min: 3, max: 50 }
+            },
+            //title sanitization
+            trim: {
+                options: [" "]
+            }
+        },
 
-    check('directorName').not().isEmpty(),
-    check('directorName').isLength({ min: 3 }),
+        directorName: {
+            in: ['body'],
+            isLength: {
+                errorMessage: 'Director Name should be between 3 to 50 chars long',
+                options: { min: 3, max: 50 }
+            },
+            trim: {
+                options: [" "]
+            }
+        }
 
+    }),
     /** Request handle */
     (req, res) => {
 
@@ -32,7 +52,7 @@ exports.movie_create = [
             return res.status(422).json({ errors: errors.array() });
         }
 
-
+        /** Create the Movie */
         return models.MovieTitle.create(
             {
                 title: req.body.title, 

@@ -66,9 +66,47 @@ describe('Movies tests', () => {
                 });
         });
 
+        it('POST a new Movie Title - Trim Title', (done) => {
+            let movieTitle = {
+                title: " Star Wars ",
+                directorName: "George Lucas",
+            }
+            chai.request(server)
+                .post('/movies')
+                .send(movieTitle)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('msg').eql('Movie successfully added!');
+                    res.body.movie.should.have.property('title');
+                    res.body.movie.title.should.eql('Star Wars');
+                    res.body.movie.should.have.property('directorName');
+                    done();
+                });
+        });
+
+        it('POST a new Movie Title - Trim Director Name', (done) => {
+            let movieTitle = {
+                title: "Star Wars 3",
+                directorName: " George Lucas ",
+            }
+            chai.request(server)
+                .post('/movies')
+                .send(movieTitle)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('msg').eql('Movie successfully added!');
+                    res.body.movie.should.have.property('title');
+                    res.body.movie.directorName.should.eql('George Lucas');
+                    res.body.movie.should.have.property('directorName');
+                    done();
+                });
+        });        
+
         it('NOT POST a new Movie Title without title', (done) => {
             let movieTitle = {
-                title: "",
+                title: '',
                 directorName: "J.R.R. Tolkien",
             }
             chai.request(server)
@@ -78,7 +116,7 @@ describe('Movies tests', () => {
                     res.should.have.status(422);
                     res.body.should.have.property('errors')
                     res.body.errors.forEach(error => {
-                        error.should.to.have.property('msg').eql('Invalid value');
+                        error.should.to.have.property('msg').eql('Title should be between 3 to 50 chars long');
                     })
                     res.body.should.be.a('object');
                     should.not.exist(res.body.movie);
@@ -98,13 +136,14 @@ describe('Movies tests', () => {
                     res.should.have.status(422);
                     res.body.should.have.property('errors')
                     res.body.errors.forEach(error => {
-                        error.should.to.have.property('msg').eql('Invalid value');
+                        error.should.to.have.property('msg').eql('Director Name should be between 3 to 50 chars long');
                     })
                     res.body.should.be.a('object');
                     should.not.exist(res.body.movie);
                     done();
                 });
-        });        
+        });
+
 
 
     });
