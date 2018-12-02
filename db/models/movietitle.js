@@ -26,5 +26,23 @@ module.exports = (sequelize, DataTypes) => {
     return movies
   })
 
+  /** Complex query to get all Movie Titles copies avaliable with rental status */
+  MovieTitle.AvaliableCopiesByName = (title) => sequelize.query("select MovieTitles.id, title, count(title) as avaliables \
+                                                            from MovieTitles \
+                                                            right join MovieCopies \
+                                                            on MovieTitles.id = MovieCopies.movieTitle_ID \
+                                                            left join Rentals \
+                                                            on MovieCopies.id = Rentals.movieCopy_ID \
+                                                            where (Rentals.rentalDate is null or Rentals.returnDate is not null) \
+                                                            and title like '"+title+"%' \
+                                                            group by title, MovieTitles.id",
+  {
+    type: sequelize.QueryTypes.SELECT
+  })
+  .then(movies => {
+    // We don't need spread here, since only the results will be returned for select queries
+    return movies
+  })
+
   return MovieTitle;
 };  

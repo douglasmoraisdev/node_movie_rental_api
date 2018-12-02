@@ -13,6 +13,9 @@ router.get('/', movie_controller.movie_list);
 /** GET Avaliable Movies Route */
 router.get('/avaliable', movie_controller.movies_avaliable);
 
+/** GET Avaliable Movies Route by Title*/
+router.get('/avaliable/bytitle/:title/', movie_controller.movies_avaliable_by_title);
+
 
 /** Root / POST Movie Route */
 router.post('/', movie_controller.movie_create);

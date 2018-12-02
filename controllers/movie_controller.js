@@ -26,6 +26,19 @@ exports.movies_avaliable = (req, res) => {
 
 }
 
+exports.movies_avaliable_by_title = (req, res) => {
+
+    let title_query = req.params.title
+
+    return models.MovieTitle.AvaliableCopiesByName(title_query)
+        .then(movies => {
+
+            res.json(movies)
+        })
+    //.catch (err => res.json(err));    
+
+}
+
 /** movie_create controller */
 exports.movie_create = [
     checkSchema({

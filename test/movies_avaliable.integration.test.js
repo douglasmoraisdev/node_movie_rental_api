@@ -30,7 +30,7 @@ describe('Avaliable Movies tests', () => {
     */
     
     /*
-      * Test the GET / route
+      * Test the GET /movies/avaliable route
       */
     describe('GET /movies/avaliable', () => {
         it('it should GET all the avaliable movies', (done) => {
@@ -47,6 +47,27 @@ describe('Avaliable Movies tests', () => {
                 });
         });
     });
+
+
+    /*
+      * Test the GET /movies/avaliable/{title} route
+      */
+    describe('GET /movies/avaliable', () => {
+        it('it should GET all the avaliable movies by a givin title name query', (done) => {
+            chai.request(server)
+                .get('/movies/avaliable/bytitle/Avangers 2')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(1);
+                    res.body.forEach(itens => {
+                        itens.should.have.property('avaliables');
+                        itens.should.have.property('title').eql("Avangers 2");
+                    })
+                    done();
+                });
+        });
+    });    
 
     /*
     afterEach((done) => { //Before each test we empty the database
