@@ -16,19 +16,13 @@ router.get('/avaliable', movie_controller.movies_avaliable);
 /** GET Avaliable Movies Route by Title*/
 router.get('/avaliable/bytitle/:title/', movie_controller.movies_avaliable_by_title);
 
-
 /** Root / POST Movie Route */
 router.post('/', movie_controller.movie_create);
 
-
-/** /about Movie Route */
-router.get('/about', (req, res) => {
-    res.send('Movies About')
-});
+/** Root / POST Movie Route */
+router.post('/rent', movie_controller.movie_rent);
 
 
-/** Test Database Route */
-router.get('/test_database', movie_controller.test_database);
 
 /** Exports Route */
 module.exports = router;

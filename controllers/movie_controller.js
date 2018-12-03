@@ -15,6 +15,7 @@ exports.movie_list = (req, res) => {
    
 }
 
+/** list all Avaliable Movies  */
 exports.movies_avaliable = (req, res) => {
 
     return models.MovieTitle.AvaliableCopies()
@@ -26,6 +27,7 @@ exports.movies_avaliable = (req, res) => {
 
 }
 
+//** list Avaliable Movies by a given title */
 exports.movies_avaliable_by_title = (req, res) => {
 
     let title_query = req.params.title
@@ -39,7 +41,7 @@ exports.movies_avaliable_by_title = (req, res) => {
 
 }
 
-/** movie_create controller */
+/** create a new Movie Title */
 exports.movie_create = [
     checkSchema({
         title:{
@@ -88,32 +90,69 @@ exports.movie_create = [
 
 }]
 
+/** create a new Rent */
+exports.movie_rent = [
+    checkSchema({
+        movie_id: {
+            //title Validations            
+            in: ['body'],
+            isEmpty: {
+                errorMessage: 'movie_id is required',
+                negated: true
+            },
+        },
 
-/** test database controller */
-exports.test_database = (req, res) => {
+        user_id: {
+            in: ['body'],
+            isEmpty: {
+                errorMessage: 'user_id is required',
+                negated: true
+            },
+        }
 
-    /*
-    models.Movie.findAll().then(movies => {
+    }),
+    /** Request handle */
+    async (req, res) => {
 
-        movies.forEach(data => {
-            console.log(data.movieTitle);
-            console.log(data.directorName);
-        });
-        res.send('Connection SUCCESSFULLY!');
-        
+        /** Check validations */
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
 
-    });
-    */
-    /**
-    sequelize.authenticate()
-        .then(() => {
-            res.send('Connection SUCCESSFULLY!')
+        /** Query user by given user_id */
+        let user = await models.User.findOne({
+            where: { id: req.body.user_id }
         })
-        .catch(err => {
-            res.send('Unable to connect to the database: ');
-            console.error('Unable to connect to the database: ', err);
-        });
+        try {           
+            var user_id = user.id 
+        } catch(e) {
+            return res.status(422).json({ msg: "User not found" })            
+        }
 
-    //res.send('test database route')
-     */
+        /** Query Avaliable MovieCopies by given movie_id */
+        let movie_copy = await models.MovieTitle.AvaliableCopiesByTitleId(req.body.movie_id)
+        try {        
+            var movie_copy_id = movie_copy[0].id
+        } catch(e) {
+            return res.status(422).json({ msg: "Movie not rented! No avaliable copies from given movie_id" })            
+        }
+
+        /** Create the Rent */
+        try {
+            var rent = await models.Rental.create(
+                {
+                    movieCopy_ID: movie_copy_id,
+                    User_ID: user_id,
+                    rentalDate: Date.now()
+                }
+            )
+        } catch (e) {
+            return res.status(422).json({ msg: "Movie not rented!", e})
+        }
+
+        return res.json({ msg: "Movie successfully rented!", rent })
+
+    }]
+
 }
