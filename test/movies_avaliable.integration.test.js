@@ -9,7 +9,8 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
-const models = require('../db/models')
+const models = require('../db/models');
+const seed = require('../db/seeders/index');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -19,15 +20,16 @@ chai.use(chaiHttp);
 //Our parent block
 describe('Avaliable Movies tests', () => {
     
-    /*
-    beforeEach((done) => { //Before each test we empty the database
+    before((done) => {
 
-        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
-        .then(() => done())
-        .catch((err) => done(err))
-
+        //** Sync database using Seeds UP (Demo Inserts) */
+        models.sequelize.sync().then(() =>{
+            return seed.up();
+        }).then(() => {
+            done()
+        });
+       
     });
-    */
     
     /*
       * Test the GET /movies/avaliable route
@@ -69,14 +71,18 @@ describe('Avaliable Movies tests', () => {
         });
     });    
 
-    /*
-    afterEach((done) => { //Before each test we empty the database
-       
-        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
-        .then(() => done())
-        .catch((err) => done(err))
+    
+    after((done) => { 
+
+        //** Sync database using Seeds Down (Delete demo data) */
+        models.sequelize.sync().then(() => {
+            return seed.down();
+        }).then(() => {
+            done()
+        });
 
     });
-    */
+    
+    
 
 });
