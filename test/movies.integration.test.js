@@ -9,7 +9,8 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
-const models = require('../db/models')
+const models = require('../db/models');
+const seed = require('../db/seeders/index');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -19,11 +20,14 @@ chai.use(chaiHttp);
 //Our parent block
 describe('Movies tests', () => {
     
-    beforeEach((done) => { //Before each test we empty the database
+    before((done) => { //Before each test we empty the database
 
-        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
-        .then(() => done())
-        .catch((err) => done(err))
+        //** Sync database using Seeds UP (Demo Inserts) */
+        models.sequelize.sync().then(() => {
+            return seed.up();
+        }).then(() => {
+            done()
+        });
 
     });
     
@@ -37,7 +41,7 @@ describe('Movies tests', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(0);
+                    res.body.length.should.be.eql(4);
                     done();
                 });
         });
@@ -147,14 +151,15 @@ describe('Movies tests', () => {
 
 
     });
-
-     
-    afterEach((done) => { //Before each test we empty the database
+    
+    after((done) => { //Before each test we empty the database
        
-        models.MovieTitle.destroy({ where: { id: { [Op.not]: null } } })
-        .then(() => done())
-        .catch((err) => done(err))
+        //** drop Test Database */
+        models.sequelize.drop().then(() => {
+            done();
+        });
 
     });
+    
 
 });

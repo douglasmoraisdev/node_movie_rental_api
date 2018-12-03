@@ -74,11 +74,9 @@ describe('Avaliable Movies tests', () => {
     
     after((done) => { 
 
-        //** Sync database using Seeds Down (Delete demo data) */
-        models.sequelize.sync().then(() => {
-            return seed.down();
-        }).then(() => {
-            done()
+        //** drop Test Database */
+        models.sequelize.drop().then(() => {
+            done();
         });
 
     });
