@@ -13,12 +13,14 @@ const models = require('../db/models');
 const seed = require('../db/seeders/index');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const { getAuthToken } = require('../helpers/test.helper')
 
 const should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
 describe('Movies tests', () => {
+
     
     before((done) => { //Before each test we empty the database
 
@@ -34,19 +36,22 @@ describe('Movies tests', () => {
     /*
       * Test the GET / route
       */
-    describe('GET / movies', () => {
+     describe('GET / movies', () => {
         it('it should GET all the movies', (done) => {
-            chai.request(server)
-                .get('/movies')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('array');
-                    res.body.length.should.be.eql(4);
-                    done();
-                });
+            getAuthToken().then(token => {
+                    chai.request(server)
+                        .get('/movies')
+                        .set('authorization', 'Bearer ' + token)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('array');
+                            res.body.length.should.be.eql(4);
+                            done();
+                        });
+            })
         });
     });
-
+                
     /*
       * Test the POST / route
       */
@@ -57,17 +62,20 @@ describe('Movies tests', () => {
                 title: "The Lord of the Rings",
                 directorName: "J.R.R. Tolkien",
             }
-            chai.request(server)
-                .post('/movies')
-                .send(movieTitle)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('msg').eql('Movie successfully added!');
-                    res.body.movie.should.have.property('title');
-                    res.body.movie.should.have.property('directorName');
-                    done();
-                });
+            getAuthToken().then(token => {
+                chai.request(server)
+                    .post('/movies')
+                    .send(movieTitle)
+                    .set('authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('msg').eql('Movie successfully added!');
+                        res.body.movie.should.have.property('title');
+                        res.body.movie.should.have.property('directorName');
+                        done();
+                    });
+            })
         });
 
         it('POST a new Movie Title - Trim Title', (done) => {
@@ -75,18 +83,22 @@ describe('Movies tests', () => {
                 title: " Star Wars ",
                 directorName: "George Lucas",
             }
-            chai.request(server)
-                .post('/movies')
-                .send(movieTitle)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('msg').eql('Movie successfully added!');
-                    res.body.movie.should.have.property('title');
-                    res.body.movie.title.should.eql('Star Wars');
-                    res.body.movie.should.have.property('directorName');
-                    done();
-                });
+            getAuthToken().then(token => {
+
+                chai.request(server)
+                    .post('/movies')
+                    .send(movieTitle)
+                    .set('authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('msg').eql('Movie successfully added!');
+                        res.body.movie.should.have.property('title');
+                        res.body.movie.title.should.eql('Star Wars');
+                        res.body.movie.should.have.property('directorName');
+                        done();
+                    });
+            })                    
         });
 
         it('POST a new Movie Title - Trim Director Name', (done) => {
@@ -94,18 +106,21 @@ describe('Movies tests', () => {
                 title: "Star Wars 3",
                 directorName: " George Lucas ",
             }
-            chai.request(server)
-                .post('/movies')
-                .send(movieTitle)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('msg').eql('Movie successfully added!');
-                    res.body.movie.should.have.property('title');
-                    res.body.movie.directorName.should.eql('George Lucas');
-                    res.body.movie.should.have.property('directorName');
-                    done();
-                });
+            getAuthToken().then(token => {            
+                chai.request(server)
+                    .post('/movies')
+                    .send(movieTitle)
+                    .set('authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('msg').eql('Movie successfully added!');
+                        res.body.movie.should.have.property('title');
+                        res.body.movie.directorName.should.eql('George Lucas');
+                        res.body.movie.should.have.property('directorName');
+                        done();
+                    });
+                })
         });        
 
         it('NOT POST a new Movie Title without title', (done) => {
@@ -113,19 +128,22 @@ describe('Movies tests', () => {
                 title: '',
                 directorName: "J.R.R. Tolkien",
             }
-            chai.request(server)
-                .post('/movies')
-                .send(movieTitle)
-                .end((err, res) => {
-                    res.should.have.status(422);
-                    res.body.should.have.property('errors')
-                    res.body.errors.forEach(error => {
-                        error.should.to.have.property('msg').eql('Title should be between 3 to 50 chars long');
-                    })
-                    res.body.should.be.a('object');
-                    should.not.exist(res.body.movie);
-                    done();
-                });
+            getAuthToken().then(token => {
+                chai.request(server)
+                    .post('/movies')
+                    .send(movieTitle)
+                    .set('authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                        res.should.have.status(422);
+                        res.body.should.have.property('errors')
+                        res.body.errors.forEach(error => {
+                            error.should.to.have.property('msg').eql('Title should be between 3 to 50 chars long');
+                        })
+                        res.body.should.be.a('object');
+                        should.not.exist(res.body.movie);
+                        done();
+                    });
+            })
         });        
 
         it('NOT POST a new Movie Title without a valid directorName', (done) => {
@@ -133,19 +151,22 @@ describe('Movies tests', () => {
                 title: "Star Wars 3",
                 directorName: "",
             }
-            chai.request(server)
-                .post('/movies')
-                .send(movieTitle)
-                .end((err, res) => {
-                    res.should.have.status(422);
-                    res.body.should.have.property('errors')
-                    res.body.errors.forEach(error => {
-                        error.should.to.have.property('msg').eql('Director Name should be between 3 to 50 chars long');
-                    })
-                    res.body.should.be.a('object');
-                    should.not.exist(res.body.movie);
-                    done();
-                });
+            getAuthToken().then(token => {
+                chai.request(server)
+                    .post('/movies')
+                    .send(movieTitle)
+                    .set('authorization', 'Bearer ' + token)
+                    .end((err, res) => {
+                        res.should.have.status(422);
+                        res.body.should.have.property('errors')
+                        res.body.errors.forEach(error => {
+                            error.should.to.have.property('msg').eql('Director Name should be between 3 to 50 chars long');
+                        })
+                        res.body.should.be.a('object');
+                        should.not.exist(res.body.movie);
+                        done();
+                    });
+            })
         });
 
 

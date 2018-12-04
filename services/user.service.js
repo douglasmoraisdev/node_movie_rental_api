@@ -4,14 +4,6 @@ const bcrypt = require('bcryptjs');
 const models = require('../db/models');
 const User = models.User;
 
-module.exports = {
-    authenticate,
-    getAll,
-    getById,
-    create,
-    update,
-    delete: _delete
-};
 
 async function authenticate({ username, password }) {
     const user = await User.findOne({ where: { email: username } });
@@ -45,7 +37,9 @@ async function create(userParam) {
     return await models.User.create(
         {
             email: userParam.username,
-            password: bcrypt.hashSync(userParam.password, 10)
+            password: bcrypt.hashSync(userParam.password, 10),
+            firstName: userParam.firstName,
+            lastName: userParam.lastName,
         }
     )    
 
@@ -74,3 +68,12 @@ async function update(id, userParam) {
 async function _delete(id) {
     await User.findByIdAndRemove(id);
 }
+
+module.exports = {
+    authenticate,
+    getAll,
+    getById,
+    create,
+    update,
+    delete: _delete
+};

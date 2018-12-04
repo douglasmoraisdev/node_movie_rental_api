@@ -2,7 +2,7 @@ const express = require('express')
 const movie_router = require('./routes/movie_routes')
 const user_router = require('./routes/user_routes')
 const bodyParser = require('body-parser')
-const jwt = require('./helpers/jwt');
+const { jwt } = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
 
 

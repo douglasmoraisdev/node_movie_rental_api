@@ -4,7 +4,7 @@
 const models = require('../db/models');
 const { checkSchema, validationResult } = require('express-validator/check');
 const Sequelize = require('sequelize');
-
+const { jwtdecode } = require('../helpers/jwt')
 
 /** movie_list controller */
 exports.movie_list = (req, res) => {
@@ -102,14 +102,6 @@ exports.movie_rent = [
             },
         },
 
-        user_id: {
-            in: ['body'],
-            isEmpty: {
-                errorMessage: 'user_id is required',
-                negated: true
-            },
-        }
-
     }),
     /** Request handle */
     async (req, res) => {
@@ -120,9 +112,11 @@ exports.movie_rent = [
             return res.status(422).json({ errors: errors.array() });
         }
 
-        /** Query user by given user_id */
+        
+        /** Query user by user_id from the auth token */
+        let auth_user_id = jwtdecode(req.headers.authorization);
         let user = await models.User.findOne({
-            where: { id: req.body.user_id }
+            where: { id: auth_user_id }
         })
         try {           
             var user_id = user.id 
@@ -166,15 +160,6 @@ exports.movie_returned = [
                 negated: true
             },
         },
-
-        user_id: {
-            in: ['body'],
-            isEmpty: {
-                errorMessage: 'user_id is required',
-                negated: true
-            },
-        }
-
     }),
     /** Request handle */
     async (req, res) => {
@@ -185,9 +170,10 @@ exports.movie_returned = [
             return res.status(422).json({ errors: errors.array() });
         }
 
-        /** Query user by given user_id */
+        /** Query user by user_id from the token */
+        let auth_user_id = jwtdecode(req.headers.authorization);
         let user = await models.User.findOne({
-            where: { id: req.body.user_id }
+            where: { id: auth_user_id }
         })
         try {
             var user_id = user.id

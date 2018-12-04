@@ -39,7 +39,8 @@ describe('Users tests', () => {
         it('Register a user', (done) => {
             let userToAuth = {
                 username: 'test_user_1@gmail.com',
-                password: 'banana'
+                password: 'banana',
+                firstName: 'Teste User Um'
             }
             chai.request(server)
                 .post('/users/register')
@@ -47,6 +48,7 @@ describe('Users tests', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.user.should.have.property('email').eql('test_user_1@gmail.com')
+                    res.body.user.should.have.property('firstName').eql('Teste User Um')
                     done();
                 });
         });
@@ -86,12 +88,9 @@ describe('Users tests', () => {
                         .end((err, res) => {
                             res.should.have.status(200);
                             res.body.should.be.a('array');
-                            res.body.length.should.be.eql(4);                            
+                            res.body.length.should.be.eql(4);
                             done();
                         });
-
-
-
                 })
 
         });
