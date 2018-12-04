@@ -185,20 +185,16 @@ exports.movie_returned = [
         let movie_copy_rented = await models.Rental.findOne({
             where: { [Sequelize.Op.and]: [{ User_ID: user_id }, 
                                           { movieCopy_ID: req.body.movie_copy_id},
+                                          { returnDate: null},
                                         ]}
 
         })
 
         /** Check is the Rent exists */
         if (movie_copy_rented == null) {
-            return res.status(422).json({ msg: "No rents found for this movie and/or user!" })
+            return res.status(422).json({ msg: "No open rents found for this movie and/or user!" })
         }
 
-
-        /** Check is the Movie Copy was already returned */
-        if (movie_copy_rented.returnDate != null){
-            return res.status(422).json({ msg: "Movie already returned!" })            
-        }
 
         /** Update the Rent */
         try {
