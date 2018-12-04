@@ -87,7 +87,7 @@ describe('Movies tests', () => {
                 .end((err, res) => {
                     res.should.have.status(422);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('msg').eql('Not rents found for this movie and/or user!');
+                    res.body.should.have.property('msg').eql('No rents found for this movie and/or user!');
                     done();
                 });
         });        
