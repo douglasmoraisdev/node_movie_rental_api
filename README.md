@@ -1,6 +1,17 @@
 # node_movie_rental_api
 A simple Movie Rental API with Node and Express.js
 
+
+## Table of Contents
+
+1. [Description](#Description)
+2. [Running](#Running)
+3. [Database Migration](#database-migration)
+4. [Test](#Test)
+4. [API EndPoints Description](#API-EndPoints-Description)
+
+---
+
 ## Description
 A REST API for a Movie Rental Business:
 
@@ -85,7 +96,7 @@ CURL example:
 > /users/authenticate
 >
 Authenticate a user, return the Auth Token
-* params(JSON) :
+* body params(JSON format) :
   * username (The user email)
   * password (User password)
 
@@ -96,7 +107,7 @@ Authenticate a user, return the Auth Token
 > /users/register
 >
 Register a new user
-* params(JSON):
+* body params(JSON format):
   * username (The user email)
   * password (User password)
   * firstName (User First Name)
@@ -112,6 +123,27 @@ Register a new user
 >
 Show a list of all available Movies for Rent and its quantity.
 * returns:  
-    * id (Movie id. Use it for Rent a movie)
+    * id (Available Movie Title id. Use it for Rent a movie)
     * title (Movie title name)
     * availables (available quantity)
+
+> /movies/rent/<movie_id>
+>
+Rent a Movie for a User. Get the first available Copy of a Movie, register the rent and returns the Movie Copy Info rented.
+* url params:
+    * movie_id (ID of a available Movie Title)
+* returns:  
+    * rent
+        * id (id of the Rent)
+        * movieCopy_ID (id of a Movie Copy. Use it for return the Movie)
+        * User_ID (id of the User),
+        * rentalDate (Rent timestamp),
+
+> /movies/return/<movie_copy_id>
+>
+Returns a Movie for a User.
+* url params:
+    * movie_copy_id (ID of a Movie Copy for return)
+* returns:  
+    * msg: (Status messagem)
+    * success: (Success Status)
