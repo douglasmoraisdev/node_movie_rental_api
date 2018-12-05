@@ -81,21 +81,7 @@ exports.movie_create = [
 }]
 
 /** create a new Rent */
-exports.movie_rent = [
-    checkSchema({
-        //Required movie_id Validations
-        movie_id: {
-            //title Validations            
-            in: ['body'],
-            isEmpty: {
-                errorMessage: 'movie_id is required',
-                negated: true
-            },
-        },
-
-    }),
-    /** Request handle */
-    async (req, res) => {
+exports.movie_rent = async (req, res) => {
 
         /** Check validations */
         const errors = validationResult(req);
@@ -116,7 +102,7 @@ exports.movie_rent = [
         }
 
         /** Query Avaliable MovieCopies by given movie_id */
-        let movie_copy = await models.MovieTitle.AvaliableCopiesByTitleId(req.body.movie_id)
+        let movie_copy = await models.MovieTitle.AvaliableCopiesByTitleId(req.params.movie_id)
         try {        
             var movie_copy_id = movie_copy[0].id
         } catch(e) {
@@ -138,29 +124,10 @@ exports.movie_rent = [
 
         return res.json({ msg: "Movie successfully rented!", success: true, rent })
 
-    }]
+    }
 
 /** create a new Rent */
-exports.movie_returned = [
-    checkSchema({
-        //Required movie_copy_id Validations
-        movie_copy_id: {
-            //title Validations            
-            in: ['body'],
-            isEmpty: {
-                errorMessage: 'movie_copy_id is required',
-                negated: true
-            },
-        },
-    }),
-    /** Request handle */
-    async (req, res) => {
-
-        /** Check validations */
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(422).json({ errors: errors.array() });
-        }
+exports.movie_returned = async (req, res) => {
 
         /** Query user by user_id from the token */
         let auth_user_id = jwtDecode(req.headers.authorization);
@@ -176,10 +143,9 @@ exports.movie_returned = [
         /** Query the MovieCopy rented by user */
         let movie_copy_rented = await models.Rental.findOne({
             where: { [Sequelize.Op.and]: [{ User_ID: user_id }, 
-                                          { movieCopy_ID: req.body.movie_copy_id},
+                                          { movieCopy_ID: req.params.movie_copy_id},
                                           { returnDate: null},
                                         ]}
-
         })
 
         /** Check is the Rent exists */
@@ -204,6 +170,6 @@ exports.movie_returned = [
             return res.status(422).json({ msg: "Movie not returned!", e })
         }
 
-        return res.json({ msg: "Movie successfully returned!", success:true })
+    return res.json({ msg: "Movie successfully returned!", success: true, movie_return })
 
-    }]
+    }

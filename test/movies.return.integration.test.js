@@ -20,7 +20,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Movies tests', () => {
+describe('Movies return tests', () => {
 
 
     before((done) => {
@@ -35,19 +35,15 @@ describe('Movies tests', () => {
 
 
     /*
-      * Test the POST /movies/return route
+      * Test the PUT /movies/return route
       */
-    describe('POST /movies/return', () => {
+    describe('PUT /movies/return/', () => {
 
         it('Return a Movie', (done) => {
-            let Rent = {
-                movie_copy_id: 4,
-            }
             getAuthToken().then(token => {
 
                 chai.request(server)
-                    .post('/movies/return')
-                    .send(Rent)
+                    .put('/movies/return/4')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(200);
@@ -63,14 +59,10 @@ describe('Movies tests', () => {
             /**
              * movie_copy_id=3 should be already returned by user
              */
-            let Rent = {
-                movie_copy_id: 4,
-            }
             getAuthToken().then(token => {
 
                 chai.request(server)
-                    .post('/movies/return')
-                    .send(Rent)
+                    .put('/movies/return/4')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(422);
@@ -85,13 +77,9 @@ describe('Movies tests', () => {
             /**
              * movie_copy_id=33333 should not exists
              */
-            let Rent = {
-                movie_copy_id: 33333,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/return')
-                    .send(Rent)
+                    .put('/movies/return/33333')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(422);
@@ -103,13 +91,9 @@ describe('Movies tests', () => {
         });
 
         it('NOT Return a Movie to a invalid user', (done) => {
-            let Rent = {
-                movie_copy_id: 2,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/return')
-                    .send(Rent)
+                    .put('/movies/return/2')
                     .set('authorization', 'Bearer ' + 'token_wrong')
                     .end((err, res) => {
                         res.should.have.status(401);
@@ -121,20 +105,13 @@ describe('Movies tests', () => {
 
 
         it('NOT Return a Movie without movie_copy_id param', (done) => {
-            let movieTitle = {
-                movie_copy_id: null,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/return')
-                    .send(movieTitle)
+                    .put('/movies/return/')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                        res.should.have.status(422);
+                        res.should.have.status(404);
                         res.body.should.be.a('object');
-                        res.body.errors.forEach(error => {
-                            error.should.to.have.property('msg').eql('movie_copy_id is required');
-                        })
                         done();
                     });
             })

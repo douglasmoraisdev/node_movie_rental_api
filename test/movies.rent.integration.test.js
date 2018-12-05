@@ -20,7 +20,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Movies tests', () => {
+describe('Movies rent tests', () => {
 
 
     before((done) => { //Before each test we empty the database
@@ -43,10 +43,7 @@ describe('Movies tests', () => {
 
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/rent')
-                    .send({
-                        movie_id: 3,
-                    })
+                    .post('/movies/rent/3')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(200);
@@ -62,13 +59,9 @@ describe('Movies tests', () => {
             /**
              * movie_id=3 should not be available copies
              */
-            let Rent = {
-                movie_id: 3,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/rent')
-                    .send(Rent)
+                    .post('/movies/rent/3')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(422);
@@ -83,14 +76,9 @@ describe('Movies tests', () => {
             /**
              * movie_id=33333 should not exists
              */
-            let Rent = {
-                movie_id: 33333,
-                user_id: 2,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/rent')
-                    .send(Rent)
+                    .post('/movies/rent/33333')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(422);
@@ -105,13 +93,9 @@ describe('Movies tests', () => {
             /**
              * user_id=2333 should not exists
              */
-            let Rent = {
-                movie_id: 2,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/rent')
-                    .send(Rent)
+                    .post('/movies/rent/2')
                     .set('authorization', 'Bearer ' + 'token_wrong')
                     .end((err, res) => {
                         res.should.have.status(401);
@@ -123,21 +107,13 @@ describe('Movies tests', () => {
 
 
         it('NOT Rent a Movie without movie_id param', (done) => {
-            let movieTitle = {
-                movie_id: null,
-                user_id: 2,
-            }
             getAuthToken().then(token => {
                 chai.request(server)
-                    .post('/movies/rent')
-                    .send(movieTitle)
+                    .post('/movies/rent/')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
-                        res.should.have.status(422);
+                        res.should.have.status(404);
                         res.body.should.be.a('object');
-                        res.body.errors.forEach(error => {
-                            error.should.to.have.property('msg').eql('movie_id is required');
-                        })
                         done();
                     });
             })

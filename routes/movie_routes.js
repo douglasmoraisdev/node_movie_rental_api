@@ -20,10 +20,10 @@ router.get('/avaliable/bytitle/:title/', movie_controller.movies_avaliable_by_ti
 router.post('/', movie_controller.movie_create);
 
 /** POST Movie Rent */
-router.post('/rent', movie_controller.movie_rent);
+router.post('/rent/:movie_id', movie_controller.movie_rent);
 
-/** POST Movie Return */
-router.post('/return', movie_controller.movie_returned);
+/** PUT Movie Return */
+router.put('/return/:movie_copy_id', movie_controller.movie_returned);
 
 
 
