@@ -13,12 +13,8 @@ async function getAuthToken() {
     let agent = chai.request.agent(server)
     let validToken = await agent.post('/users/authenticate')
         .send({
-            //username: 'j.silva@gmail.com',
-            //password: 'abacate'
             username: 'm.rodrigues@gmail.com',
             password: '1234'
-        }).then((token) => {
-            return token
         })
     return validToken.body.token
 }  

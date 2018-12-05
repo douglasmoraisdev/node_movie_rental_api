@@ -53,7 +53,7 @@ describe('Movies tests', () => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         res.body.should.have.property('msg').eql('Movie successfully returned!');
-                        res.body.should.have.property('movie_return');
+                        res.body.should.have.property('success').eql(true);
                         done();
                     });
             })

@@ -4,48 +4,39 @@
 const models = require('../db/models');
 const { checkSchema, validationResult } = require('express-validator/check');
 const Sequelize = require('sequelize');
-const { jwtdecode } = require('../helpers/jwt')
+const { jwtDecode } = require('../helpers/jwt')
 
-/** movie_list controller */
-exports.movie_list = (req, res) => {
+/** Return all Movies  */
+exports.movie_list = async (req, res) => {
 
-    return models.MovieTitle.findAll().then(movies => {
-        res.json(movies);
-    });
+    let movies = await (models.MovieTitle.findAll())
+    res.json(movies)
    
 }
 
 /** list all Avaliable Movies  */
-exports.movies_avaliable = (req, res) => {
+exports.movies_avaliable = async (req, res) => {
 
-    return models.MovieTitle.AvaliableCopies()
-    .then(movies => {  
-
-        res.json(movies)
-    })
-    //.catch (err => res.json(err));    
+    let movies = await models.MovieTitle.AvaliableCopies();
+    res.json(movies);
 
 }
 
 //** list Avaliable Movies by a given title */
-exports.movies_avaliable_by_title = (req, res) => {
+exports.movies_avaliable_by_title = async (req, res) => {
 
-    let title_query = req.params.title
+    let title_query = req.params.title;
 
-    return models.MovieTitle.AvaliableCopiesByName(title_query)
-        .then(movies => {
-
-            res.json(movies)
-        })
-    //.catch (err => res.json(err));    
-
+    let movies = await models.MovieTitle.AvaliableCopiesByName(title_query);
+    res.json(movies);
+        
 }
 
 /** create a new Movie Title */
 exports.movie_create = [
     checkSchema({
+        //title Validations            
         title:{
-            //title Validations            
             in: ['body'],
             isLength: {
                 errorMessage: 'Title should be between 3 to 50 chars long',
@@ -56,7 +47,7 @@ exports.movie_create = [
                 options: [" "]
             }
         },
-
+        //director Name Validations
         directorName: {
             in: ['body'],
             isLength: {
@@ -70,7 +61,7 @@ exports.movie_create = [
 
     }),
     /** Request handle */
-    (req, res) => {
+    async (req, res) => {
 
         /** Check validations */
         const errors = validationResult(req);
@@ -79,20 +70,20 @@ exports.movie_create = [
         }
 
         /** Create the Movie */
-        return models.MovieTitle.create(
+        let movie = await models.MovieTitle.create(
             {
                 title: req.body.title, 
                 directorName: req.body.directorName
             }
-        ).then(movie => 
-            res.json({ msg: "Movie successfully added!", movie })
-        )
+        );
+        res.json({ msg: "Movie successfully added!", movie });
 
 }]
 
 /** create a new Rent */
 exports.movie_rent = [
     checkSchema({
+        //Required movie_id Validations
         movie_id: {
             //title Validations            
             in: ['body'],
@@ -114,7 +105,7 @@ exports.movie_rent = [
 
         
         /** Query user by user_id from the auth token */
-        let auth_user_id = jwtdecode(req.headers.authorization);
+        let auth_user_id = jwtDecode(req.headers.authorization);
         let user = await models.User.findOne({
             where: { id: auth_user_id }
         })
@@ -145,13 +136,14 @@ exports.movie_rent = [
             return res.status(422).json({ msg: "Movie not rented!", e})
         }
 
-        return res.json({ msg: "Movie successfully rented!", rent })
+        return res.json({ msg: "Movie successfully rented!", success: true, rent })
 
     }]
 
 /** create a new Rent */
 exports.movie_returned = [
     checkSchema({
+        //Required movie_copy_id Validations
         movie_copy_id: {
             //title Validations            
             in: ['body'],
@@ -171,7 +163,7 @@ exports.movie_returned = [
         }
 
         /** Query user by user_id from the token */
-        let auth_user_id = jwtdecode(req.headers.authorization);
+        let auth_user_id = jwtDecode(req.headers.authorization);
         let user = await models.User.findOne({
             where: { id: auth_user_id }
         })
@@ -212,6 +204,6 @@ exports.movie_returned = [
             return res.status(422).json({ msg: "Movie not returned!", e })
         }
 
-        return res.json({ msg: "Movie successfully returned!", movie_return })
+        return res.json({ msg: "Movie successfully returned!", success:true })
 
     }]

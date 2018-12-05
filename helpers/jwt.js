@@ -3,7 +3,7 @@ const expressJwt = require('express-jwt');
 const userService = require('../services/user.service');
 const jsonwt = require('jsonwebtoken')
 
-function jwtdecode (authorization){
+function jwtDecode (authorization){
     
     let token = authorization.split(' ')[1]
     return jsonwt.verify(token, 'config.secret', function (err, decoded) {
@@ -13,7 +13,7 @@ function jwtdecode (authorization){
     
 }
 
-function jwt () {
+function jwtMiddleware () {
     const secret = 'config.secret';
     return expressJwt({ secret, isRevoked }).unless({
         path: [
@@ -35,4 +35,4 @@ async function isRevoked(req, payload, done) {
     done();
 };
 
-module.exports = { jwt, jwtdecode };
+module.exports = { jwtMiddleware, jwtDecode };
