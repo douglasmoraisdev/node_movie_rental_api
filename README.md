@@ -93,7 +93,7 @@ CURL example:
 
 ### User Routes
 
-> /users/authenticate
+>POST /users/authenticate
 >
 Authenticate a user, return the Auth Token
 * body params(JSON format) :
@@ -104,7 +104,7 @@ Authenticate a user, return the Auth Token
     * token (Use it on Authorization Header Bearer)
 
 
-> /users/register
+>POST /users/register
 >
 Register a new user
 * body params(JSON format):
@@ -119,7 +119,7 @@ Register a new user
 
 ### Movies Routes
 
-> /movies/available
+>GET /movies/available
 >
 Show a list of all available Movies for Rent and its quantity.
 * returns:  
@@ -127,7 +127,7 @@ Show a list of all available Movies for Rent and its quantity.
     * title (Movie title name)
     * availables (available quantity)
 
-> /movies/rent/<movie_id>
+>POST /movies/rent/<movie_id>
 >
 Rent a Movie for a User. Get the first available Copy of a Movie, register the rent and returns the Movie Copy Info rented.
 * url params:
@@ -139,7 +139,7 @@ Rent a Movie for a User. Get the first available Copy of a Movie, register the r
         * User_ID (id of the User),
         * rentalDate (Rent timestamp),
 
-> /movies/return/<movie_copy_id>
+>PUT /movies/return/<movie_copy_id>
 >
 Returns a Movie for a User.
 * url params:
