@@ -10,11 +10,11 @@ let router = express.Router();
 /** GET Movie list Route */
 router.get('/', movie_controller.movie_list);
 
-/** GET Avaliable Movies Route */
-router.get('/avaliable', movie_controller.movies_avaliable);
+/** GET Available Movies Route */
+router.get('/available', movie_controller.movies_available);
 
-/** GET Avaliable Movies Route by Title*/
-router.get('/avaliable/bytitle/:title/', movie_controller.movies_avaliable_by_title);
+/** GET Available Movies Route by Title*/
+router.get('/available/bytitle/:title/', movie_controller.movies_available_by_title);
 
 /** POST a new Movie Route */
 router.post('/', movie_controller.movie_create);

@@ -19,7 +19,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Avaliable Movies tests', () => {
+describe('Available Movies tests', () => {
 
     before((done) => {
 
@@ -33,21 +33,21 @@ describe('Avaliable Movies tests', () => {
     });
 
     /*
-      * Test the GET /movies/avaliable route
+      * Test the GET /movies/available route
       */
-    describe('GET /movies/avaliable', () => {
-        it('it should GET all the avaliable movies', (done) => {
+    describe('GET /movies/available', () => {
+        it('it should GET all the available movies', (done) => {
 
             getAuthToken().then(token => {
                 chai.request(server)
-                    .get('/movies/avaliable')
+                    .get('/movies/available')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
                         res.body.length.should.be.eql(4);
                         res.body.forEach(itens => {
-                            itens.should.have.property('avaliables');
+                            itens.should.have.property('availables');
                         })
                         done();
                     });
@@ -57,20 +57,20 @@ describe('Avaliable Movies tests', () => {
 
 
     /*
-      * Test the GET /movies/avaliable/{title} route
+      * Test the GET /movies/available/{title} route
       */
-    describe('GET /movies/avaliable', () => {
-        it('it should GET all the avaliable movies by a givin title name query', (done) => {
+    describe('GET /movies/available', () => {
+        it('it should GET all the available movies by a givin title name query', (done) => {
             getAuthToken().then(token => {
                 chai.request(server)
-                    .get('/movies/avaliable/bytitle/Avangers 2')
+                    .get('/movies/available/bytitle/Avangers 2')
                     .set('authorization', 'Bearer ' + token)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');
                         res.body.length.should.be.eql(1);
                         res.body.forEach(itens => {
-                            itens.should.have.property('avaliables');
+                            itens.should.have.property('availables');
                             itens.should.have.property('title').eql("Avangers 2");
                         })
                         done();

@@ -14,20 +14,20 @@ exports.movie_list = async (req, res) => {
    
 }
 
-/** list all Avaliable Movies  */
-exports.movies_avaliable = async (req, res) => {
+/** list all Available Movies  */
+exports.movies_available = async (req, res) => {
 
-    let movies = await models.MovieTitle.AvaliableCopies();
+    let movies = await models.MovieTitle.AvailableCopies();
     res.json(movies);
 
 }
 
-//** list Avaliable Movies by a given title */
-exports.movies_avaliable_by_title = async (req, res) => {
+//** list Available Movies by a given title */
+exports.movies_available_by_title = async (req, res) => {
 
     let title_query = req.params.title;
 
-    let movies = await models.MovieTitle.AvaliableCopiesByName(title_query);
+    let movies = await models.MovieTitle.AvailableCopiesByName(title_query);
     res.json(movies);
         
 }
@@ -101,12 +101,12 @@ exports.movie_rent = async (req, res) => {
             return res.status(422).json({ msg: "User not found" })            
         }
 
-        /** Query Avaliable MovieCopies by given movie_id */
-        let movie_copy = await models.MovieTitle.AvaliableCopiesByTitleId(req.params.movie_id)
+        /** Query Available MovieCopies by given movie_id */
+        let movie_copy = await models.MovieTitle.AvailableCopiesByTitleId(req.params.movie_id)
         try {        
             var movie_copy_id = movie_copy[0].id
         } catch(e) {
-            return res.status(422).json({ msg: "Movie not rented! No avaliable copies from given movie_id" })            
+            return res.status(422).json({ msg: "Movie not rented! No available copies from given movie_id" })            
         }
 
         /** Create the Rent */

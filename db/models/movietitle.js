@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
 
   };
 
-  /** Complex query to get all Movie Titles copies avaliable with rental status */
-  MovieTitle.AvaliableCopies = async () => await sequelize.query(
-                                                                "select MovieTitles.id, title, count(title) as avaliables \
+  /** Complex query to get all Movie Titles copies available with rental status */
+  MovieTitle.AvailableCopies = async () => await sequelize.query(
+                                                                "select MovieTitles.id, title, count(title) as availables \
                                                                 from MovieTitles  \
                                                                 right join MovieCopies  \
                                                                 on MovieTitles.id = MovieCopies.movieTitle_ID  \
@@ -25,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     type: sequelize.QueryTypes.SELECT
   })
 
-  /** Complex query to get all Movie Titles copies avaliable with rental status */
-  MovieTitle.AvaliableCopiesByName = async (title) => await sequelize.query(
-                                                                            "select MovieTitles.id, title, count(title) as avaliables \
+  /** Complex query to get all Movie Titles copies available with rental status */
+  MovieTitle.AvailableCopiesByName = async (title) => await sequelize.query(
+                                                                            "select MovieTitles.id, title, count(title) as availables \
                                                                             from MovieTitles  \
                                                                             right join MovieCopies  \
                                                                             on MovieTitles.id = MovieCopies.movieTitle_ID  \
@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
     type: sequelize.QueryTypes.SELECT
   })
 
-  /** Complex query to get a Avaliable MovieCopy by MovieTitle id */
-  MovieTitle.AvaliableCopiesByTitleId = async (movie_id) => await sequelize.query(
+  /** Complex query to get a Available MovieCopy by MovieTitle id */
+  MovieTitle.AvailableCopiesByTitleId = async (movie_id) => await sequelize.query(
                                                                                   "select MovieCopies.* \
                                                                                   from MovieTitles \
                                                                                   right join MovieCopies \

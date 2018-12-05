@@ -66,7 +66,7 @@ describe('Movies rent tests', () => {
                     .end((err, res) => {
                         res.should.have.status(422);
                         res.body.should.be.a('object');
-                        res.body.should.have.property('msg').eql('Movie not rented! No avaliable copies from given movie_id');
+                        res.body.should.have.property('msg').eql('Movie not rented! No available copies from given movie_id');
                         done();
                     });
             })
@@ -83,7 +83,7 @@ describe('Movies rent tests', () => {
                     .end((err, res) => {
                         res.should.have.status(422);
                         res.body.should.be.a('object');
-                        res.body.should.have.property('msg').eql('Movie not rented! No avaliable copies from given movie_id');
+                        res.body.should.have.property('msg').eql('Movie not rented! No available copies from given movie_id');
                         done();
                     });
             })
